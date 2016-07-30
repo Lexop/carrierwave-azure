@@ -37,7 +37,7 @@ module CarrierWave
           blocks        = []
 
           until file_to_send.eof?
-            block_id = Base64.urlsafe_encode64(SecureRandom.uuid)
+            block_id = SecureRandom.uuid
 
             @content = file_to_send.read 4194304 # Send 4MB chunk
             @connection.create_blob_block @uploader.azure_container, @path, block_id, @content
@@ -45,7 +45,7 @@ module CarrierWave
           end
 
           # Commit block blobs
-          @connection.commit_blob_blocks @uploader.azure_container, @path, blocks
+          @connection.commit_blob_blocks @uploader.azure_container, @path, blocks, blob_content_type: @content_type
 
           true
         end
