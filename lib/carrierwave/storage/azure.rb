@@ -38,9 +38,8 @@ module CarrierWave
 
           until file_to_send.eof?
             block_id = SecureRandom.uuid
-
-            @content = file_to_send.read 4194304 # Send 4MB chunk
-            @connection.create_blob_block @uploader.azure_container, @path, block_id, @content
+            block_content = file_to_send.read 4194304 # Send 4MB chunk
+            @connection.create_blob_block @uploader.azure_container, @path, block_id, block_content
             blocks << [block_id]
           end
 
