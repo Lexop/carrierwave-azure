@@ -23,6 +23,8 @@ module CarrierWave
       end
 
       class File
+        include CarrierWave::Utilities::Uri
+
         attr_reader :path
 
         def initialize(uploader, connection, path)
@@ -50,7 +52,7 @@ module CarrierWave
         end
 
         def url(options = {})
-          path = ::File.join @uploader.azure_container, @path
+          path = ::File.join(@uploader.azure_container, encode_path(@path))
           if @uploader.asset_host
             "#{@uploader.asset_host}/#{path}"
           else
